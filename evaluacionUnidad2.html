@@ -1,85 +1,81 @@
+function calcularDistancia(x1, y1, x2, y2) {
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+}
 
-import java.util.Scanner;
-import javax.swing.JOptionPane;
+function calcularLados(x1, y1, x2, y2, x3, y3) {
+    let lado1 = calcularDistancia(x1, y1, x2, y2);
+    let lado2 = calcularDistancia(x2, y2, x3, y3);
+    let lado3 = calcularDistancia(x3, y3, x1, y1);
+    return [lado1, lado2, lado3];
+}
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-/**
- *
- * @author mrona
- */
-public class evaluacionUnidad2 {
-
-
-
-    //T P
-    public static double calcularDistancia(double x1, double y1, double x2, double y2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+function calcularPerimetro(lados) {
+    let perimetro = 0;
+    for (let lado of lados) {
+        perimetro += lado;
     }
-    //T P
-    public static double[] calcularLados(double x1, double y1, double x2, double y2, double x3, double y3) {
-        double lado1 = calcularDistancia(x1, y1, x2, y2);
-        double lado2 = calcularDistancia(x2, y2, x3, y3);
-        double lado3 = calcularDistancia(x3, y3, x1, y1);
-        return new double[]{lado1, lado2, lado3};
-    }
+    return perimetro;
+}
 
-    public static double calcularPerimetro(double[] lados) {
-        double perimetro = 0;
-        for (double lado : lados) {
-            perimetro += lado;
-        }
-        return perimetro;
-    }
-    //H
-    public static double calcularArea(double[] lados) {
-        double semiperimetro = calcularPerimetro(lados) / 2;
-        return Math.sqrt(semiperimetro * (semiperimetro - lados[0]) * (semiperimetro - lados[1]) * (semiperimetro - lados[2]));
-    }
-    // C
-    public static double[] calcularAngulos(double[] lados) {
-        double angulo1 = Math.toDegrees(Math.acos((Math.pow(lados[1], 2) + Math.pow(lados[2], 2) - Math.pow(lados[0], 2)) / (2 * lados[1] * lados[2])));
-        double angulo2 = Math.toDegrees(Math.acos((Math.pow(lados[0], 2) + Math.pow(lados[2], 2) - Math.pow(lados[1], 2)) / (2 * lados[0] * lados[2])));
-        double angulo3 = 180 - angulo1 - angulo2;
-        return new double[]{angulo1, angulo2, angulo3};
-    }
+function calcularArea(lados) {
+    let semiperimetro = calcularPerimetro(lados) / 2;
+    return Math.sqrt(semiperimetro * (semiperimetro - lados[0]) * (semiperimetro - lados[1]) * (semiperimetro - lados[2]));
+}
 
-    public static String determinarTipo(double[] lados) {
-        if (lados[0] == lados[1] && lados[1] == lados[2]) {
-            return "Equilátero";
-        } else if (lados[0] == lados[1] || lados[0] == lados[2] || lados[1] == lados[2]) {
-            return "Isósceles";
-        } else {
-            return "Escaleno";
-        }
-    }
+function calcularAngulos(lados) {
+    let angulo1 = Math.acos((Math.pow(lados[1], 2) + Math.pow(lados[2], 2) - Math.pow(lados[0], 2)) / (2 * lados[1] * lados[2])) * (180 / Math.PI);
+    let angulo2 = Math.acos((Math.pow(lados[0], 2) + Math.pow(lados[2], 2) - Math.pow(lados[1], 2)) / (2 * lados[0] * lados[2])) * (180 / Math.PI);
+    let angulo3 = 180 - angulo1 - angulo2;
+    return [angulo1, angulo2, angulo3];
+}
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Ingrese las coordenadas del primer vértice (x y):");
-        double x1 = scanner.nextDouble();
-        double y1 = scanner.nextDouble();
-
-        System.out.println("Ingrese las coordenadas del segundo vértice (x y):");
-        double x2 = scanner.nextDouble();
-        double y2 = scanner.nextDouble();
-
-        System.out.println("Ingrese las coordenadas del tercer vértice (x y):");
-        double x3 = scanner.nextDouble();
-        double y3 = scanner.nextDouble();
-
-        double[] lados = calcularLados(x1, y1, x2, y2, x3, y3);
-        double perimetro = calcularPerimetro(lados);
-        double area = calcularArea(lados);
-        double[] angulos = calcularAngulos(lados);
-        String tipo = determinarTipo(lados);
-
-        System.out.println("El triángulo es de tipo: " + tipo);
-        System.out.println("El perímetro del triángulo es: " + perimetro);
-        System.out.println("El área del triángulo es: " + area);
-        System.out.println("Los ángulos del triángulo son: " + angulos[0] + ", " + angulos[1] + ", " + angulos[2]);
+function determinarTipo(lados) {
+    if (lados[0] === lados[1] && lados[1] === lados[2]) {
+        return "Equilátero";
+    } else if (lados[0] === lados[1] || lados[0] === lados[2] || lados[1] === lados[2]) {
+        return "Isósceles";
+    } else {
+        return "Escaleno";
     }
 }
+
+function main() {
+    const readline = require('readline');
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    rl.question("Ingrese las coordenadas del primer vértice (x y): ", function (input) {
+        let coords = input.split(" ");
+        let x1 = parseFloat(coords[0]);
+        let y1 = parseFloat(coords[1]);
+
+        rl.question("Ingrese las coordenadas del segundo vértice (x y): ", function (input) {
+            coords = input.split(" ");
+            let x2 = parseFloat(coords[0]);
+            let y2 = parseFloat(coords[1]);
+
+            rl.question("Ingrese las coordenadas del tercer vértice (x y): ", function (input) {
+                coords = input.split(" ");
+                let x3 = parseFloat(coords[0]);
+                let y3 = parseFloat(coords[1]);
+
+                let lados = calcularLados(x1, y1, x2, y2, x3, y3);
+                let perimetro = calcularPerimetro(lados);
+                let area = calcularArea(lados);
+                let angulos = calcularAngulos(lados);
+                let tipo = determinarTipo(lados);
+
+                console.log("El triángulo es de tipo: " + tipo);
+                console.log("El perímetro del triángulo es: " + perimetro);
+                console.log("El área del triángulo es: " + area);
+                console.log("Los ángulos del triángulo son: " + angulos[0] + ", " + angulos[1] + ", " + angulos[2]);
+
+                rl.close();
+            });
+        });
+    });
+}
+
+main();
